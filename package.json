@@ -1,0 +1,56 @@
+{
+  "name": "photomap",
+  "version": "1.0.0",
+  "description": "Display your photos on a map.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build:base:github": "vite build --base /photomap/",
+    "build:base": "vite build",
+    "build:html": "html-minifier-terser --collapse-whitespace --remove-comments -o dist/index.html dist/index.html",
+    "build:images": "cp node_modules/leaflet/dist/images/* dist/",
+    "build": "npm run build:base && npm run build:html && npm run build:images",
+    "build:github": "npm run build:base:github && npm run build:html && npm run build:images",
+    "preview": "vite preview",
+    "format": "prettier --write ./**/*{.js,html,css}"
+  },
+  "keywords": [],
+  "author": "JanMalch",
+  "license": "NONE",
+  "private": true,
+  "type": "module",
+  "exifreader": {
+    "// TODO": "https://github.com/mattiasw/ExifReader/issues/409",
+    "include": {
+      "exif": [
+        "DateTime",
+        "GPSLatitude",
+        "GPSLatitudeRef",
+        "GPSLongitude",
+        "GPSLongitudeRef",
+        "GPSAltitude",
+        "GPSAltitudeRef",
+        "Make",
+        "Model",
+        "FNumber",
+        "ImageWidth",
+        "ImageLength",
+        "FocalLength"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.12",
+    "@types/leaflet.markercluster": "^1.5.4",
+    "html-minifier-terser": "^7.2.0",
+    "prettier": "^3.3.3",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "exifreader": "^4.23.6",
+    "exponential-backoff": "^3.1.1",
+    "leaflet": "^1.9.4",
+    "leaflet.fullscreen": "^3.0.2",
+    "leaflet.markercluster": "^1.5.3"
+  }
+}

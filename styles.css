@@ -1,0 +1,340 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+:root {
+  font-weight: 400;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --color-bg: #fafafa;
+  --color-img-bg: #eee;
+  --color-primary: #009688;
+  --color-on-primary: #fff;
+  --color-border: #ddd;
+  --elevation-default: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  --action-spacing: 0.75rem;
+}
+
+.leaflet-container,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+:root,
+input,
+button {
+  font-family:
+    Roboto,
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    Segoe UI Symbol;
+}
+
+a,
+button,
+button.leaflet-control {
+  cursor: pointer;
+}
+
+.leaflet-touch button.leaflet-bar {
+  padding: 0;
+  min-height: 30px;
+  min-width: 30px;
+  line-height: 30px;
+}
+
+.leaflet-touch button.leaflet-bar:has(> svg) {
+  display: grid;
+  place-items: center;
+}
+
+#map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.border {
+  border: 1px solid var(--color-border);
+}
+
+.leaflet-touch .leaflet-bar,
+.shadow {
+  box-shadow: var(--elevation-default);
+}
+
+::backdrop {
+  backdrop-filter: grayscale(0.5) blur(5px);
+}
+
+[popover]::backdrop {
+  background-color: rgb(0, 0, 0, 0.75);
+}
+
+dialog#welcome {
+  border-radius: 2em;
+  text-align: center;
+  max-width: min(80ch, 90vw);
+  outline: none;
+  padding: 2em;
+}
+
+dialog#welcome button {
+  display: block;
+  width: 100%;
+  padding: 0.75em 0.5em;
+  text-align: center;
+  border-radius: 0.5em;
+  border: none;
+  outline: none;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+}
+
+dialog#welcome button[disabled] {
+  background-color: #5f6368;
+  cursor: wait;
+}
+
+dialog#lightbox {
+  place-items: center;
+  max-width: 100%;
+  max-height: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+dialog#lightbox[open] {
+  display: grid;
+}
+
+#lightbox-img {
+  display: grid;
+  place-items: center;
+}
+
+#lightbox-img > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+#lightbox > button {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+}
+
+#lightbox > #metadata {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: var(--color-bg);
+}
+
+#import-report {
+  display: none;
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  background-color: var(--color-bg);
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+#date-range {
+  background: var(--color-bg);
+  border-radius: 0.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  padding: 0.5rem;
+  position: fixed;
+  top: var(--action-spacing);
+  left: var(--action-spacing);
+}
+
+#compass {
+  background: var(--color-bg);
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  width: 7rem;
+}
+
+#compass-btns {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  transform: rotate(45deg);
+}
+
+#compass-btns > button {
+  background-color: var(--color-bg);
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  transition: background-color 0.3s;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+#compass-btns > button:hover {
+  background-color: var(--color-img-bg);
+}
+
+#compass-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #5f6368;
+}
+
+.compass__letter {
+  position: absolute;
+  font-size: 18px;
+  color: #5f6368;
+  pointer-events: none;
+}
+
+#compass-letter-n,
+#compass-letter-s {
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#compass-letter-s {
+  top: unset;
+  bottom: 5%;
+}
+
+#compass-letter-w,
+#compass-letter-e {
+  left: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#compass-letter-e {
+  left: unset;
+  right: 10%;
+}
+
+.leaflet-popup-content {
+  margin: 1em 1em 0.75em;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+}
+
+.leaflet-bar a {
+  color: #5f6368; /* SVG icon color */
+  font-weight: 400;
+}
+
+.leaflet-touch .leaflet-bar a:first-child {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.leaflet-touch .leaflet-bar a:last-child {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+app-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.map-popup__parent {
+  font-size: 0.9em;
+}
+
+.map-popup__image {
+  height: 14em;
+  background-color: var(--color-img-bg);
+  border-radius: 0.5em;
+  overflow: hidden;
+}
+
+.map-popup__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.map-popup__footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2em;
+}
+
+.map-popup__coords {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+#lightbox {
+  max-width: 95%;
+  max-height: 95%;
+  outline: none;
+  border: none;
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: transparent;
+}
+
+#lightbox > img {
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 2em;
+}
