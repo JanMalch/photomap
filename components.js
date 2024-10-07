@@ -29,8 +29,7 @@ export class PopupContent extends HTMLElement {
   #onClick() {
     // TODO: use viewTransition API
     //   https://glitch.com/edit/#!/simple-set-demos?path=7-expanding-image-ratio%2Fscript.js%3A1%3A0
-    this.#image.handle
-      .getFile()
+    this.#image.getFile()
       .then((file) => {
         // URL is revoked in main file via event listener
         const lightboxUrl = URL.createObjectURL(file);
@@ -70,7 +69,7 @@ export class PopupContent extends HTMLElement {
     const imgContainerEl = this.querySelector(".map-popup__image");
     imgContainerEl.addEventListener("click", () => this.#onClick());
 
-    this.#image.handle
+    this.#image
       .getFile()
       .then((file) => {
         if (this.#isDisconnected) {
@@ -98,5 +97,5 @@ export class PopupContent extends HTMLElement {
 if ("customElements" in window) {
   customElements.define("app-popup-content", PopupContent);
 } else {
-  alert("Use a modern browser.");
+  alert("Use a modern browser."); // TODO: improve? :D
 }

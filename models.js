@@ -22,7 +22,11 @@ export class Image {
   /**
    * @type {FileSystemFileHandle}
    */
-  handle;
+  _handle;
+  /**
+   * @type {File}
+   */
+  _file;
   /**
    * @type {string}
    */
@@ -46,22 +50,38 @@ export class Image {
 
   /**
    * Creates a new file.
-   * @param {string} parent
-   * @param {string} path
-   * @param {string} name
-   * @param {FileSystemFileHandle} handle
-   * @param {LatLng} latlng
-   * @param {Date} date
+   * @param {string | Image} parentOrImage
+   * @param {string?} path
+   * @param {string?} name
+   * @param {FileSystemFileHandle | File?} handle
+   * @param {LatLng?} latlng
+   * @param {Date?} date
    */
-  constructor(parent, path, name, handle, latlng, date) {
+  constructor(parentOrImage, path, name, handle, latlng, date) {
+    if (arguments.length === 1 && typeof parentOrImage === 'object') {
+      Object.assign(this, parentOrImage);
+      return this;
+    }
     if (latlng == null) {
       throw new Error(`Received no LatLng for file ${path}.`);
     }
-    this.parent = parent;
+    this.parent = parentOrImage;
     this.path = path;
     this.name = name;
-    this.handle = handle;
+    if (handle instanceof FileSystemFileHandle) {
+      this._handle = handle;
+    } else {
+      this._file = handle;
+    }
     this.coordinates = latlng;
     this.date = date;
+  }
+
+
+  /**
+   * @returns {Promise<File>}
+   */
+  getFile() {
+    return this._file ? Promise.resolve(this._file) : this._handle.getFile();
   }
 }

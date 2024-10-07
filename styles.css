@@ -47,6 +47,7 @@ button {
 
 a,
 button,
+.button,
 button.leaflet-control {
   cursor: pointer;
 }
@@ -96,10 +97,26 @@ dialog#welcome {
   padding: 2em;
 }
 
+dialog#welcome > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+dialog#welcome input {
+  width: 0;
+  height: 0;
+  position: fixed;
+  left: -100vw;
+  top: -100vh;
+}
+
+dialog#welcome .button,
 dialog#welcome button {
   display: block;
+  flex: 1;
   width: 100%;
-  padding: 0.75em 0.5em;
+  padding: 0.75em 1em;
   text-align: center;
   border-radius: 0.5em;
   border: none;
@@ -110,11 +127,17 @@ dialog#welcome button {
   letter-spacing: 0.5px;
   transition: background-color 0.2s;
   font-size: 1rem;
+  line-height: 1.5;
+  white-space: nowrap;
 }
 
 dialog#welcome button[disabled] {
   background-color: #5f6368;
   cursor: wait;
+}
+
+dialog#welcome p {
+  margin: 1rem 0 2rem;
 }
 
 dialog#lightbox {

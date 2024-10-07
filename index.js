@@ -35,10 +35,11 @@ function onReceiveImages(bulk) {
   if (bulk.length === 0) {
     return;
   }
-  store.addImages(bulk);
+  const revived = bulk.map(x => new Image(x))
+  store.addImages(revived);
   renderDateRange();
 
-  const newMarkers = bulk.map((image) =>
+  const newMarkers = revived.map((image) =>
     L.marker(image.coordinates).bindPopup(
       () => new PopupContent(image, lightboxEl),
     ),
@@ -81,9 +82,16 @@ function beginProcessing(worker, directories) {
           break;
       }
     };
-    worker.postMessage({
-      directories,
-    });
+    // TODO: make this nicer
+    if (directories[0] instanceof FileSystemDirectoryHandle) {
+      worker.postMessage({
+        directories,
+      });
+    } else {
+      worker.postMessage({
+        files: directories,
+      });
+    }
   });
 }
 
@@ -107,11 +115,7 @@ walker.onmessage = function (e) {
     .finally(() => console.timeEnd("import"));
 };
 
-async function onLoadFiles() {
-  if (typeof window["showDirectoryPicker"] === "undefined") {
-    alert("Use a Chromium browser."); // TODO: input fallback?
-    return;
-  }
+async function onSelectDirectory() {
   /** @type {FileSystemDirectoryHandle} */
   const selectedDirectory = await window
     .showDirectoryPicker({ id: "photomap", startIn: "pictures" })
@@ -124,6 +128,34 @@ async function onLoadFiles() {
   document.getElementById("welcome").close();
   importReportEl.style.display = "block";
   importReportEl.textContent = selectedDirectory.name;
+}
+
+/**
+ * @param {FileList | undefined | null} files
+ */
+function onFilesPicked(files) {
+  if (!files || files.length === 0) {
+    return;
+  }
+  walker.terminate();
+  walker = undefined;
+  console.time("import");
+  const fileArray = Array.from(files);
+  const first = fileArray.slice(0, Math.floor(fileArray.length / 2));
+  const second = fileArray.slice(Math.floor(fileArray.length / 2));
+  Promise.all([
+    beginProcessing(worker1, first),
+    beginProcessing(worker2, second),
+  ])
+    .then(() => {
+      importReportEl.remove();
+      importReportEl = undefined;
+    })
+    .catch((err) =>
+      console.error("Error while handling files", fileArray, err),
+    )
+    .finally(() => console.timeEnd("import"));
+  document.getElementById("welcome").close();
 }
 
 function main() {
@@ -163,9 +195,17 @@ function main() {
     })
     .addTo(map);
 
-  const loadFilesBtn = document.getElementById("load-files");
-  loadFilesBtn.disabled = false;
-  loadFilesBtn.addEventListener("click", () => onLoadFiles());
+  const selectDirectoryBtn = document.getElementById("select-directory");
+  if (selectDirectoryBtn) {
+  selectDirectoryBtn.disabled = false;
+  selectDirectoryBtn.addEventListener("click", () => onSelectDirectory());
+  }
+
+  const pickFilesInput = document.getElementById("pick-files");
+  pickFilesInput.disabled = false;
+  pickFilesInput.addEventListener("change", (ev) => {
+    onFilesPicked(ev.target.files)
+  });
 
   lightboxEl.addEventListener("toggle", (e) => {
     if (e.newState === "closed") {

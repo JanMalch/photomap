@@ -19,12 +19,23 @@
       <img src="icon-192.png" alt="Logo" width="64" height="64" />
       <h1>PhotoMap</h1>
       <p>
-        View all your photos on a world map.<br />
-        None of your images are uploaded to a server.
+        View your photos on a world map.<br />
+        None of your files are uploaded to a server.
       </p>
-      <button id="load-files" type="button" disabled>Select Directory</button>
+      <div>
+        <label class="button">
+          <span>Pick Files</span>
+          <input type="file" id="pick-files" disabled multiple />
+        </label>
+        <small id="or"><i>or</i></small>
+        <button id="select-directory" type="button" disabled>Select Directory</button>
+      </div>
     </dialog>
     <script>
+      if (typeof window["showDirectoryPicker"] === "undefined") {
+        document.getElementById("or").remove();
+        document.getElementById("select-directory").remove();
+      }
       document.getElementById("welcome").showModal();
     </script>
   </body>
