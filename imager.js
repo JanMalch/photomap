@@ -1,4 +1,4 @@
-import ExifReader from "exifreader";
+import ExifReader from "exifreader/dist/exif-reader.js";
 import { Image, LatLng } from "./models.js";
 
 // low bulk sizes are more fun to watch

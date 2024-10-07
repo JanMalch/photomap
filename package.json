@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
+    "optim": "npm rebuild exifreader && rm -rf node_modules/.vite",
     "build:base:github": "vite build --base /photomap/",
     "build:base": "vite build",
     "build:html": "html-minifier-terser --collapse-whitespace --remove-comments -o dist/index.html dist/index.html",
     "build:images": "cp node_modules/leaflet/dist/images/* dist/",
     "build": "npm run build:base && npm run build:html && npm run build:images",
-    "build:github": "npm run build:base:github && npm run build:html && npm run build:images",
+    "build:github": "npm run optim && npm run build:base:github && npm run build:html && npm run build:images",
     "preview": "vite preview",
     "format": "prettier --write ./**/*{.js,html,css}"
   },
@@ -20,8 +21,8 @@
   "private": true,
   "type": "module",
   "exifreader": {
-    "// TODO": "https://github.com/mattiasw/ExifReader/issues/409",
     "include": {
+      "jpeg": true,
       "exif": [
         "DateTime",
         "GPSLatitude",
@@ -29,13 +30,7 @@
         "GPSLongitude",
         "GPSLongitudeRef",
         "GPSAltitude",
-        "GPSAltitudeRef",
-        "Make",
-        "Model",
-        "FNumber",
-        "ImageWidth",
-        "ImageLength",
-        "FocalLength"
+        "GPSAltitudeRef"
       ]
     }
   },
@@ -47,7 +42,7 @@
     "vite": "^5.4.8"
   },
   "dependencies": {
-    "exifreader": "^4.23.6",
+    "exifreader": "^4.23.7",
     "exponential-backoff": "^3.1.1",
     "leaflet": "^1.9.4",
     "leaflet.fullscreen": "^3.0.2",
